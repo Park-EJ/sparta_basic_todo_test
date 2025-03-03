@@ -1,5 +1,6 @@
 package com.example.basictodotest.todo.entity;
 
+import com.example.basictodotest.common.entity.BaseEntity;
 import com.example.basictodotest.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Todo {
+@Table(name = "todos")
+public class Todo extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

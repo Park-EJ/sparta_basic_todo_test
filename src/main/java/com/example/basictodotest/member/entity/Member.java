@@ -1,5 +1,6 @@
 package com.example.basictodotest.member.entity;
 
+import com.example.basictodotest.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
-public class Member {
+@Table(name = "members")
+public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +26,7 @@ public class Member {
         this.password = password;
         this.name = name;
     }
+
 
     public void update(String name) {
         this.name = name;

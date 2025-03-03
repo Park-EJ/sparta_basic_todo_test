@@ -38,7 +38,10 @@ public class TodoService {
                 saved.getId(),
                 saved.getMember().getId(),
                 saved.getMember().getName(),
-                saved.getContent());
+                saved.getContent(),
+                saved.getCreatedAt(),
+                saved.getUpdatedAt()
+        );
     }
 
     // 일정 전체 조회
@@ -61,13 +64,19 @@ public class TodoService {
     // 일정 수정
     @Transactional
     public TodoUpdateResponsetDto update(Long memberId, Long todoId, TodoUpdateRequestDto dto) {
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "멤버가 아닙니다."));
+        Member member = memberRepository.findById(memberId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 멤버가 아닙니다."));
 
-        Todo todo = todoRepository.findById(todoId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 없습니다."));
+        Todo todo = todoRepository.findById(todoId).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정이 없습니다."));
+
+        if (!todo.getMember().getId().equals(member.getId())) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 일정의 작성자가 아닙니다.");
+        }
 
         todo.update(dto.getContent());
 
-        return new TodoUpdateResponsetDto(todo.getContent());
+        return new TodoUpdateResponsetDto(todo.getContent(), todo.getCreatedAt(), todo.getUpdatedAt());
     }
 
     // 일정 삭제
